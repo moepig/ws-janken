@@ -5,5 +5,7 @@ from janken import views
 app_name = 'janken'
 
 urlpatterns = [
-    url(r'^lobby$', views.LobbyView.as_view(), name='lobby')
+    url(r'^lobby$', views.LobbyView.as_view(), name='lobby'),
+
+    url(r'^publish$', views.publish, name='publish'),
 ]
