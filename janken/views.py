@@ -15,3 +15,15 @@ def publish(request):
     Group("1").send({'text': msg})
 
     return HttpResponse("published!")
+
+
+class MatchView(TemplateView):
+    template_name = "janken/match.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+
+        context["room_id"] = kwargs.get("room_id", "undefined")
+
+        return context
+

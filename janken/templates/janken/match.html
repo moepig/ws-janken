@@ -1,0 +1,28 @@
+{% extends './base/base.html' %}
+
+{% block contents %}
+
+ルームID：{{ room_id }}
+<table>
+    <!-- やばいくらいクソなHTML -->
+    <!-- TODO: ベーシックインカム来たら改修 -->
+    <tr>
+        <td id="user1">
+            <div class="te">ここに手が出る</div><br />
+            <button>グー</button>
+            <button>チョキ</button>
+            <button>パー</button><br />
+            <div class="result">win</div>
+        </td>
+        <td id="user2">
+            <div class="te">ここに手が出る</div><br />
+            <button> グー</button>
+            <button> チョキ</button>
+            <button> パー</button><br />
+            <div class="result">win</div>
+        </td>
+
+    </tr>
+</table>
+
+{% endblock %}

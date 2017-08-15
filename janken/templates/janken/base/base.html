@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +7,11 @@
     <title>おちんぽこ太郎参上！</title>
 </head>
 <body>
+{% block header %}
+    {% include './header.html' %}
+{% endblock %}
+<br />
+
 {% block contents %}
 
 {% endblock %}

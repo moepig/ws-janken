@@ -121,6 +121,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+LOGIN_URL          = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_ERROR_URL    = '/login-error/'
+
+SOCIAL_AUTH_TWITTER_KEY = '73XH9AOJtgTo6WEGC3L2rw'
+SOCIAL_AUTH_TWITTER_SECRET = 'yoRvT6Bfv0ALYJXiI9JwSs8ZgAzRJvQDRJqHq0Nd2ho'
 
 CHANNEL_LAYERS = {
     'default': {
