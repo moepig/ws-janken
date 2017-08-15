@@ -1,6 +1,67 @@
 {% extends './base/base.html' %}
 
 {% block contents %}
+<script>
+    /* ごみのようなジャバスクリプト */
+    // TODO: 老後に直す
+
+    var player1_te = 0;
+    var player2_te = 0;
+
+    // 1 -> goo, 2 -> choki, 3-> par
+
+    function clickTe(te, player){
+        if(player == 1) player1_te = te;
+        else if(player == 2) player2_te = te;
+
+        changeDisp(player);
+    }
+
+    function changeDisp(player){
+        // 自分の手
+        if(player == 1) {
+            var teDispElem = document.getElementById("p1_te");
+            teDispElem.textContent = player1_te;
+        } else if(player == 2){
+            var teDispElem = document.getElementById("p2_te")
+            teDispElem.textContent = player2_te;
+        }
+
+        // 勝敗判定
+        var win = 1;
+        if (player1_te == 0 || player2_te == 0) {
+            win = -1;// まだ手が出揃ってない
+        } else if (player1_te == player2_te) {
+            win = 0;// あいこ
+        } else {
+            if (player1_te == 3 && player2_te == 1) {
+                // p1のかち
+            } else if(player1_te < player2_te) {
+                // p1のかち
+            } else {
+                win = 2;
+            }
+        }
+
+        var p1ResultDispElem = document.getElementById("p1_result");
+        var p2ResultDispElem = document.getElementById("p2_result");
+        if (win == 1) {
+            p1ResultDispElem.textContent = "win!";
+            p2ResultDispElem.textContent = "lose..";
+        } else if (win == 2) {
+            p2ResultDispElem.textContent = "win!";
+            p1ResultDispElem.textContent = "lose..";
+        } else if (win == 0) {
+            p1ResultDispElem.textContent = "aiko";
+            p2ResultDispElem.textContent = "aiko";
+        } else {
+            if (player1_te == 0) p1ResultDispElem.textContent = "↑おせ";
+            if (player2_te == 0) p2ResultDispElem.textContent = "↑おせ";
+        }
+    }
+
+</script>
+
 
 ルームID：{{ room_id }}
 <table>
@@ -8,18 +69,18 @@
     <!-- TODO: ベーシックインカム来たら改修 -->
     <tr>
         <td id="user1">
-            <div class="te">ここに手が出る</div><br />
-            <button>グー</button>
-            <button>チョキ</button>
-            <button>パー</button><br />
-            <div class="result">win</div>
+            <div id="p1_te">ここに手が出る</div><br />
+            <button onclick="clickTe(1, 1)">グー</button>
+            <button onclick="clickTe(2, 1)">チョキ</button>
+            <button onclick="clickTe(3, 1)">パー</button><br />
+            <div id="p1_result"></div>
         </td>
         <td id="user2">
-            <div class="te">ここに手が出る</div><br />
-            <button> グー</button>
-            <button> チョキ</button>
-            <button> パー</button><br />
-            <div class="result">win</div>
+            <div id="p2_te">ここに手が出る</div><br />
+            <button onclick="clickTe(1, 2)"> グー</button>
+            <button onclick="clickTe(2, 2)"> チョキ</button>
+            <button onclick="clickTe(3, 2)"> パー</button><br />
+            <div id="p2_result"></div>
         </td>
 
     </tr>
