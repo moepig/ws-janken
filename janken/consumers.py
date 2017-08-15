@@ -18,6 +18,11 @@ class Consumer(WebsocketConsumer):
 
         room_manager.discard_room(message, room_id)
 
+    def receive(self, text=None, bytes=None, **kwargs):
+        room_manager = RoomManager.get_instance()
+        room_id = int(kwargs['room_id'])
+
+        room_manager.receive_handler_room(text, room_id)
 
 class RoomManager:
     """
@@ -69,6 +74,10 @@ class RoomManager:
         room = self._rooms[room_id]
         room.discard(message)
 
+    def receive_handler_room(self, text, room_id):
+        room = self._rooms[room_id]
+        room.receive(text)
+
 
 class Room:
 
@@ -79,6 +88,7 @@ class Room:
 
         self.create(message)
 
+    # WebSocketの接続切断とかそういうの
     def create(self, message):
         message.reply_channel.send({"accept": True})
         Group(str(self._room_id)).add(message.reply_channel)
@@ -89,3 +99,17 @@ class Room:
 
     def discard(self, message):
         Group(str(self._room_id)).discard(message.reply_channel)
+
+    def receive(self, text):
+        import json
+        Group(str(self._room_id)).send({
+            "text": json.dumps({ # この形のjsonが送られる
+                "text": text,
+            }),
+        })
+
+    # じゃんけん部屋っぽい要素
+    def join_game(self, play_side):
+        # play_side -> 1 or 2
+        pass
+
