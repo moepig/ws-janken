@@ -10,7 +10,43 @@
 
     // 1 -> goo, 2 -> choki, 3-> par
 
+    var connection = new WebSocket('ws://localhost:8000/ws/{{ room_id }}');
+
+    // Log errors
+    connection.onerror = function (error) {
+      console.log('WebSocket Error ' + error);
+    };
+
+    // Log messages from the server
+    connection.onmessage = function (e) {
+      console.log('Server: ' + e.data);
+
+      data = JSON.parse(e.data);
+
+      data = JSON.parse(data["text"]);
+
+      if(data["command"] == "join"){
+          enemy_join(data["player_side"]);
+      } else if(data["command"] == "decide"){
+          enemyClickTe(data["te"], data["player_side"]);
+      }
+    };
+
     function clickTe(te, player){
+        if(player == 1) player1_te = te;
+        else if(player == 2) player2_te = te;
+
+        var send_data = {
+            command: "decide",
+            te: te,
+            player_side: player
+        };
+        connection.send(JSON.stringify(send_data));
+
+        changeDisp(player);
+    }
+
+    function enemyClickTe(te, player){
         if(player == 1) player1_te = te;
         else if(player == 2) player2_te = te;
 
@@ -60,6 +96,37 @@
         }
     }
 
+    function join(player){
+        var p1_button = document.getElementById("p1_join");
+        var p2_button = document.getElementById("p2_join");
+
+        if(player == 1){
+            var send_data = {
+                command: "join",
+                player_side: 1
+            };
+            connection.send(JSON.stringify(send_data));
+        } else {
+            var send_data = {
+                "command": "join",
+                "player_side": 2
+            };
+            connection.send(JSON.stringify(send_data));
+        }
+    }
+
+    function enemy_join(player){
+        var p1_button = document.getElementById("p1_join");
+        var p2_button = document.getElementById("p2_join");
+
+        if(player == 1){
+            p1_button.style.display = "none";
+        } else {
+            p2_button.style.display = "none";
+        }
+    }
+
+
 </script>
 
 
@@ -69,6 +136,7 @@
     <!-- TODO: ベーシックインカム来たら改修 -->
     <tr>
         <td id="user1">
+            <button id="p1_join" onclick="join(1)">P1で遊ぶ</button><br />
             <div id="p1_te">ここに手が出る</div><br />
             <button onclick="clickTe(1, 1)">グー</button>
             <button onclick="clickTe(2, 1)">チョキ</button>
@@ -76,6 +144,7 @@
             <div id="p1_result"></div>
         </td>
         <td id="user2">
+            <button id="p2_join" onclick="join(2)">P2で遊ぶ</button><br />
             <div id="p2_te">ここに手が出る</div><br />
             <button onclick="clickTe(1, 2)"> グー</button>
             <button onclick="clickTe(2, 2)"> チョキ</button>
